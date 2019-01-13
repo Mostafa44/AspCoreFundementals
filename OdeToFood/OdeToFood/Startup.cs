@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OdeToFood.Services;
 
 namespace OdeToFood
 {
@@ -18,6 +20,7 @@ namespace OdeToFood
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IGreeting, GreetingService>();
+            services.AddScoped<IRestaurantData, InMemoryRestaurantData>();
             services.AddMvc();
         }
 
@@ -54,7 +57,7 @@ namespace OdeToFood
             //app.UseDefaultFiles();
              app.UseStaticFiles();
             //The Line below is an alterntaive to having "app.UseDefaultFiles(); app.UseStaticFiles();"
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(ConfigureRoutes);
             //app.UseFileServer();
             app.UseWelcomePage(new WelcomePageOptions() { Path="/wp"});
             app.Run(async (context) =>
@@ -63,8 +66,13 @@ namespace OdeToFood
                 //var greeting = config["Greeting"];
                 // var message = greeting.GetMessageOfTheDay();
                 var message = configuration["Greeting"];
-                await context.Response.WriteAsync($"{message}: {env.EnvironmentName }");
+                await context.Response.WriteAsync($"Not Found");
             });
+        }
+
+        private void ConfigureRoutes(IRouteBuilder routeBuilder)
+        {
+           // routeBuilder.MapRoute("Default", "/{controller=Home}/{action=Index}");
         }
     }
 }
