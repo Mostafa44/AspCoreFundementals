@@ -17,6 +17,12 @@ namespace OdeToFood.Services
             _restaurants.Add(new Restaurant() { Id = 2, Name = "Mostafa's Grill House" });
             _restaurants.Add(new Restaurant() { Id = 3, Name = "Bill's Burger Joint" });
         }
+
+        public Restaurant Get(int id)
+        {
+            return _restaurants.FirstOrDefault(r => r.Id == id);
+        }
+
         public IEnumerable<Restaurant> GetAll()
         {
             return _restaurants;
